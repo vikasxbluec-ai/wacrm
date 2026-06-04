@@ -914,10 +914,18 @@ export async function getMediaUrl(
   args: GetMediaUrlArgs
 ): Promise<{ url: string; mimeType: string }> {
   const { mediaId, accessToken } = args
-  const isValidMediaId = /^[a-zA-Z0-9_]+$/.test(mediaId);
-if (!isValidMediaId) {
-  throw new Error('Invalid Media ID format provided.');
-}
+
+  // 1. Sanitize the mediaId to ensure it doesn't contain path traversal sequences
+  const sanitizedMediaId = mediaId.replace(/[\/\.\\]/g, '');
+
+  if (!sanitizedMediaId) {
+    throw new Error('Invalid mediaId provided.');
+  }
+
+  // 2. Safely encode the component inside the URL template literal
+  const response = await fetch(`${META_API_BASE}/${encodeURIComponent(sanitizedMediaId)}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  })
   const response = await fetch(`${META_API_BASE}/${mediaId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   })
