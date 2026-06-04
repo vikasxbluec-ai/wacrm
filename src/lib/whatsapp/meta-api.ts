@@ -168,6 +168,16 @@ export async function subscribeWabaToApp(
   args: SubscribeWabaToAppArgs
 ): Promise<void> {
   const { wabaId, accessToken } = args
+
+  // 1. Sanitize the wabaId to ensure it only contains digits
+  const sanitizedWabaId = wabaId.replace(/\D/g, '');
+
+  if (!sanitizedWabaId) {
+    throw new Error('Invalid wabaId provided.');
+  }
+
+  // 2. Wrap it with encodeURIComponent to guarantee it stays in the proper path segment
+  const url = `${META_API_BASE}/${encodeURIComponent(sanitizedWabaId)}/subscribed_apps`
   const url = `${META_API_BASE}/${wabaId}/subscribed_apps`
   const response = await fetch(url, {
     method: 'POST',
