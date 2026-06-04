@@ -741,7 +741,10 @@ async function parseMessageContent(
       await getMediaUrl({ mediaId, accessToken })
       return `/api/whatsapp/media/${mediaId}`
     } catch (error) {
+
+  //  SAFE AND CLEAN FIX     
       console.error(
+"%s",
         `Failed to verify media ${mediaId} with Meta:`,
         error instanceof Error ? error.message : error
       )
