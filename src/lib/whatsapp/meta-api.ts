@@ -51,11 +51,17 @@ export interface VerifyPhoneNumberArgs {
  * Verify a Meta phone number ID by fetching its public metadata
  * (display_phone_number, verified_name, quality_rating).
  */
-export async function verifyPhoneNumber(
-  args: VerifyPhoneNumberArgs
-): Promise<MetaPhoneInfo> {
+
+export async function verifyPhoneNumber(args: VerifyPhoneNumberArgs ): Promise<MetaPhoneInfo> {
   const { phoneNumberId, accessToken } = args
-  const url = `${META_API_BASE}/${phoneNumberId}?fields=id,display_phone_number,verified_name,quality_rating`
+  
+  // Sanitize here too!
+  const sanitizedPhoneId = phoneNumberId.replace(/\D/g, '');
+  if (!sanitizedPhoneId) throw new Error('Invalid phoneNumberId provided.');
+
+  const url = `${META_API_BASE}/${encodeURIComponent(sanitizedPhoneId)}?fields=id,display_phone_number,verified_name,quality_rating`
+  // ... rest of the fetch call
+  
   const response = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },
   })
@@ -124,7 +130,15 @@ export async function registerPhoneNumber(
   args: RegisterPhoneNumberArgs
 ): Promise<RegisterPhoneNumberResult> {
   const { phoneNumberId, accessToken, pin } = args
-  const url = `${META_API_BASE}/${phoneNumberId}/register`
+// 1. Sanitize phoneNumberId to keep only numeric digits
+  const sanitizedPhoneId = phoneNumberId.replace(/\D/g, '');
+
+  if (!sanitizedPhoneId) {
+    throw new Error('Invalid phoneNumberId provided.');
+  }
+  // 2. Use the sanitized and encoded variable in the fetch URL
+  const url = `${META_API_BASE}/${encodeURIComponent(sanitizedPhoneId)}/register`
+  
   const response = await fetch(url, {
     method: 'POST',
     headers: {
