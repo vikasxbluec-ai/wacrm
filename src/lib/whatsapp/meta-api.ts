@@ -191,8 +191,7 @@ export async function subscribeWabaToApp(
   }
 
   // 2. Wrap it with encodeURIComponent to guarantee it stays in the proper path segment
-  const url = `${META_API_BASE}/${encodeURIComponent(sanitizedWabaId)}/subscribed_apps`
-  const url = `${META_API_BASE}/${wabaId}/subscribed_apps`
+  const url = `${META_API_BASE}/${encodeURIComponent(sanitizedWabaId)}/subscribed_apps``
   const response = await fetch(url, {
     method: 'POST',
     headers: { Authorization: `Bearer ${accessToken}` },
