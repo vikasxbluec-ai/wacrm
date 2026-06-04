@@ -914,6 +914,10 @@ export async function getMediaUrl(
   args: GetMediaUrlArgs
 ): Promise<{ url: string; mimeType: string }> {
   const { mediaId, accessToken } = args
+  const isValidMediaId = /^[a-zA-Z0-9_]+$/.test(mediaId);
+if (!isValidMediaId) {
+  throw new Error('Invalid Media ID format provided.');
+}
   const response = await fetch(`${META_API_BASE}/${mediaId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   })
