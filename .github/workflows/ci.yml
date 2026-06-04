@@ -12,6 +12,21 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Cancel older CI runs for the same branch when a new commit arrives —
+# saves minutes when someone pushes a stack of fixes to one PR.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# 🔒 ADD THIS TO FIX THE SECURITY ALERT:
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+
 jobs:
   check:
     name: Lint, typecheck, test, build
