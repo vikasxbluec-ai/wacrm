@@ -233,7 +233,9 @@ export async function POST(request: Request) {
         })
         sentCount++
       } else {
+        //  SAFE AND CLEAN FIX
         console.error(
+          "%s",
           `Failed to send broadcast to ${recipient.phone}:`,
           lastError
         )
