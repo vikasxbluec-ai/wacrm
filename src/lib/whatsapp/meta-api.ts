@@ -950,9 +950,7 @@ export async function getMediaUrl(
   const response = await fetch(`${META_API_BASE}/${encodeURIComponent(sanitizedMediaId)}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   })
-  const response = await fetch(`${META_API_BASE}/${mediaId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  })
+  
   if (!response.ok) {
     await throwMetaError(response, `Media fetch failed: ${response.status}`)
   }
